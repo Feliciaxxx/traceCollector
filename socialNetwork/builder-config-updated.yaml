@@ -1,0 +1,17 @@
+# builder-config.yaml - 更新版本
+dist:
+  name: final-collector
+  description: My Final Custom Collector with Jaeger support
+  output_path: ./final-collector
+
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.130.1
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/jaegerreceiver v0.130.1
+
+processors:
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/groupbytraceprocessor v0.130.1
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor v0.130.1
+
+exporters:
+  - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.130.1
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/exporter/jaegerexporter v0.130.1

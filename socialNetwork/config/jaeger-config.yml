@@ -1,0 +1,9 @@
+disabled: false
+reporter:
+  logSpans: false
+  localAgentHostPort: "jaeger-agent:6831"  # 使用默认的Jaeger agent
+  queueSize: 1000000
+  bufferFlushInterval: 10
+sampler:
+  type: "probabilistic"
+  param: 1.0  # 100%采样率

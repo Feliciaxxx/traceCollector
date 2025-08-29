@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: "0.0.0.0:8326"
+      grpc:
+        endpoint: "0.0.0.0:8325"
+
+processors:
+  groupbytrace:
+    wait_duration: 2s
+    num_traces: 1000
+
+  tail_sampling:
+    sample_rate: 1.0
+    buffer_size: 5
+    pool_height: 10
+    combination_count: 2
+    decision_wait: 1s
+
+exporters:
+  debug:
+    verbosity: detailed
+    
+service:
+  telemetry:
+    logs:
+      level: debug
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [groupbytrace, tail_sampling]
+      exporters: [debug]
