@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: "0.0.0.0:8326"
+      grpc:
+        endpoint: "0.0.0.0:8325"
+
+processors:
+  tail_sampling:
+    # 遗传算法优化配置
+    sample_rate: 0.1          # 10% 采样率，触发优化
+    buffer_size: 3            # 极小缓冲区，强制频繁触发
+    pool_height: 5            # 小历史池，快速达到阈值
+    combination_count: 2      # 最小组合数
+    decision_wait: 500ms      # 短决策时间，快速处理
+
+exporters:
+  debug:
+    verbosity: detailed
+    
+service:
+  telemetry:
+    logs:
+      level: debug
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [tail_sampling]
+      exporters: [debug]

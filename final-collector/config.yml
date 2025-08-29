@@ -1,0 +1,26 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: "0.0.0.0:5326"  # 更改端口避免冲突
+      grpc:
+        endpoint: "0.0.0.0:5325"  # 更改端口避免冲突
+
+processors:
+  tail_sampling:
+    sample_rate: 1.0         # 100% 采样，确保所有数据通过
+    buffer_size: 5           # 很小的缓冲区，收集5条就触发采样
+    pool_height: 10          # 减小历史池
+    combination_count: 2     # 减少组合数，加快处理
+    decision_wait: 1s        # 缩短决策时间
+
+exporters:
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [tail_sampling]
+      exporters: [debug]

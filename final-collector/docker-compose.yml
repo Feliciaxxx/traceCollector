@@ -1,0 +1,29 @@
+services:
+  collector:
+    # 方案1：使用 build 指令，让 Docker Compose 自动管理镜像名称
+    build:
+      context: .
+    container_name: my-custom-collector
+    ports:
+      - "4318:4318" # OTLP HTTP 端口
+      - "4317:4317" # OTLP gRPC 端口
+    # 将我们本地的配置文件挂载到容器中，方便随时修改
+    volumes:
+      - ./config.yml:/app/config.yml
+    networks:
+      - my-network
+
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   container_name: jaeger
+  #   ports:
+  #     - "8080:16686" # Jaeger UI 端口
+  #     - "14268:14268" # Jaeger HTTP 端口
+  #   environment:
+  #     - COLLECTOR_OTLP_ENABLED=true
+  #   networks:
+  #     - my-network
+
+networks:
+  my-network:
+    driver: bridge

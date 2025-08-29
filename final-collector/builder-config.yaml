@@ -1,0 +1,21 @@
+dist:
+  name: final-collector
+  description: Final Collector for Microservice Testing
+  output_path: ./
+  otelcol_version: "0.133.0"
+
+# replaces 指令告诉 builder，在构建时使用本地文件夹
+replaces:
+  - github.com/samplingCollector/groupbytraceprocessor => ./groupbytraceprocessor
+  - github.com/samplingCollector/tailsamplingprocessor => ./tailsamplingprocessor
+
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.133.0
+
+processors:
+  # 使用我们的自定义处理器
+  - gomod: github.com/samplingCollector/groupbytraceprocessor v0.0.0
+  - gomod: github.com/samplingCollector/tailsamplingprocessor v0.0.0
+
+exporters:
+  - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.133.0
